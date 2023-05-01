@@ -1,7 +1,7 @@
 package main
 
 import (
-	"CydeaOS/libs"
+	"cydeaos/libs"
 	"fmt"
 )
 

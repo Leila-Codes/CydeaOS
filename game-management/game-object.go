@@ -1,6 +1,6 @@
 package main
 
-import "CydeaOS/libs"
+import "cydeaos/libs"
 
 type GameState int
 

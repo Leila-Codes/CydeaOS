@@ -5,13 +5,28 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/segmentio/kafka-go"
+	"github.com/sirupsen/logrus"
 	"os"
 )
 
 func main() {
+	logrus.SetFormatter(&logrus.TextFormatter{
+		ForceColors: true,
+	})
+
 	brokerURL := os.Getenv("BROKER_URL")
 	topic := os.Getenv("TOPIC")
 	responderTopic := os.Getenv("RESPONDER_TOPIC")
+
+	logrus.WithFields(logrus.Fields{
+		"Broker": brokerURL,
+		"Topic":  topic,
+	}).Info("Consumer connected.")
+
+	logrus.WithFields(logrus.Fields{
+		"Broker": brokerURL,
+		"Topic":  responderTopic,
+	}).Info("Producer connected.")
 
 	var (
 		inputs  = make(chan GameManagementPayload, 1_000)

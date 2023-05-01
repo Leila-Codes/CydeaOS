@@ -1,8 +1,9 @@
 package main
 
 import (
-	"CydeaOS/libs"
+	"cydeaos/libs"
 	"fmt"
+	"github.com/sirupsen/logrus"
 )
 
 func wrapError(err error) libs.GameEventPayload {
@@ -15,6 +16,11 @@ func wrapError(err error) libs.GameEventPayload {
 func processor(input <-chan GameManagementPayload, output chan<- interface{}) {
 	for {
 		event := <-input
+
+		logrus.WithFields(logrus.Fields{
+			"Type":     event.Type,
+			"GameCode": event.GameCode,
+		}).Debug("Received event.")
 
 		switch event.Type {
 		case GetGameType:
@@ -56,10 +62,29 @@ func processor(input <-chan GameManagementPayload, output chan<- interface{}) {
 				Success:          true,
 			}
 		case GameStartedType:
+			// TODO: check if player is host. start game if so.
 			output <- wrapError(fmt.Errorf("not implemented"))
 			//output <- startGame(event)
 		case GameStoppedType:
-			//output <- stopGame(event)
+			// TODO: check if player is host. stop game if so.
+			game, err := GetGame(event.GameCode)
+			if err != nil {
+				wrapError(err)
+				continue
+			}
+			if game.State != Running {
+				wrapError(fmt.Errorf("game is not running"))
+			}
+			game.State = Stopped
+			output <- libs.GameEventPayload{
+				GameEventChannel: libs.GameManagementEvent,
+				GameCode:         event.GameCode,
+				Success:          true,
+			}
+		default:
+			logrus.WithFields(logrus.Fields{
+				"Type": event.Type,
+			}).Error("Unknown event type.")
 		}
 	}
 }
