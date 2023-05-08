@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cydeaos-api
+  labels:
+    app: cydeaos-api
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: cydeaos-api
+  template:
+    metadata:
+      name: cydeaos-api
+      labels:
+        app: cydeaos-api
+    spec:
+      containers:
+        - name: cydeaos-api
+          image: cydeaos/cydeaos-api:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080
+              name: http
+      restartPolicy: Always

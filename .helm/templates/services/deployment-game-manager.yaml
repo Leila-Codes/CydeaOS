@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cydeaos-game-manager
+  labels:
+    app: cydeaos-game-manager
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cydeaos-game-manager
+  template:
+    metadata:
+      name: cydeaos-game-manager
+      labels:
+        app: cydeaos-game-manager
+    spec:
+      containers:
+        - name: cydeaos-game-manager
+          image: cydeaos/cydeaos-game-manager:latest
+          imagePullPolicy: IfNotPresent
+      restartPolicy: Always

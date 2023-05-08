@@ -36,6 +36,37 @@ func NewGame(config GameConfiguration, hostInfo libs.Player) GameObject {
 	return *activeGames[gameCode]
 }
 
+// JoinGame - Adds a player to a game (matching the game code).
+// TODO: check if player is already in game. update player socket if so.
+func JoinGame(gameCode string, player libs.Player) error {
+	game, err := GetGame(gameCode)
+	if err != nil {
+		return err
+	}
+
+	game.Players = append(game.Players, player)
+
+	return nil
+}
+
+// LeaveGame - Removes a player from a game (matching the game code).
+func LeaveGame(gameCode string, player libs.Player) error {
+	game, err := GetGame(gameCode)
+	if err != nil {
+		return err
+	}
+
+	for i, p := range game.Players {
+		if p == player {
+			game.Players = append(game.Players[:i], game.Players[i+1:]...)
+			return nil
+		}
+	}
+
+	return fmt.Errorf("player not found in game")
+}
+
+// DeleteGame - Stops the game immediately and deletes all associated data.
 func DeleteGame(gameCode string) error {
 	game, err := GetGame(gameCode)
 	if err != nil {

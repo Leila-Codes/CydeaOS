@@ -1,0 +1,8 @@
+apiVersion: v2
+version: 0.1.0-dev
+name: lunasphere.co.uk/cydeaos
+description: A microservice powered, multiplayer hacking simulator for the web.
+kubeVersion: 1.18.0
+maintainers:
+  - name: Leila-Codes
+    email: leila.richardson-noyes@protonmail.com

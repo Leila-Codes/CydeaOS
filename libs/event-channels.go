@@ -1,16 +1,19 @@
 package libs
 
+import (
+	"fmt"
+	"strings"
+)
+
 type GameEventChannel string
 
 const (
-	GameManagementEvent GameEventChannel = "game-management"
-	NodeManagementEvent GameEventChannel = "node-management"
-	NetworkEvent        GameEventChannel = "network"
-	FileEvent           GameEventChannel = "file"
-	CommandEvent        GameEventChannel = "command"
-	MusicEvent          GameEventChannel = "music"
-	SettingsEvent       GameEventChannel = "settings"
-	ChatEvent           GameEventChannel = "chat"
-	PlayerEvent         GameEventChannel = "player"
-	CoreSystemEvent     GameEventChannel = "core-system"
+	//Private GameEventChannel = "private"
+	Game   GameEventChannel = "game"
+	Global GameEventChannel = "global"
 )
+
+func (gec GameEventChannel) TopicName() string {
+	eventName := string(gec)
+	return fmt.Sprintf("cydea_%s", strings.ReplaceAll(eventName, "-", "_"))
+}

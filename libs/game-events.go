@@ -1,13 +1,21 @@
 package libs
 
-type GameEventPayload struct {
-	GameEventChannel `json:"event"`
-	GameCode         string `json:"gameCode"`
-	Player           Player `json:"player"`
-	Success          bool   `json:"success"`
-	Error            error  `json:"error"`
+type GameEventHeader struct {
+	Channel GameEventChannel
+	Type    EventType
 }
 
-func (ge *GameEventPayload) HasGameCode() bool {
-	return len(ge.GameCode) > 0
+// GameEvent - A generic game event payload container.
+type GameEvent struct {
+	Channel  GameEventChannel
+	Type     EventType
+	GameCode *string
+	Player   *Player
+	Result   *string
+	Success  bool
+	Error    error
+}
+
+func (ge *GameEvent) HasGameCode() bool {
+	return ge.GameCode != nil
 }
