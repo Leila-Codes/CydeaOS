@@ -10,6 +10,7 @@ type GameEventChannel string
 const (
 	//Private GameEventChannel = "private"
 	Game   GameEventChannel = "game"
+	Media  GameEventChannel = "media"
 	Global GameEventChannel = "global"
 )
 

@@ -12,11 +12,6 @@ import (
 	"time"
 )
 
-type WebsocketClient struct {
-	*websocket.Conn
-	socketID string
-}
-
 var (
 	upgrader = websocket.Upgrader{HandshakeTimeout: 10 * time.Second}
 

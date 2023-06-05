@@ -1,6 +1,8 @@
-package main
+package events
 
-import "cydeaos/libs"
+import (
+	"cydeaos/libs"
+)
 
 const (
 	GameGet    libs.EventType = "get-game"
@@ -11,9 +13,3 @@ const (
 	GameStop   libs.EventType = "stop-game"
 	GameDelete libs.EventType = "delete-game"
 )
-
-type GameManagementPayload struct {
-	libs.GameEvent
-	GameInfo   GameObject        `json:"gameInfo"`
-	GameConfig GameConfiguration `json:"gameConfig"`
-}
