@@ -14,6 +14,7 @@ func init() {
 	logger.SetFormatter(&logrus.TextFormatter{
 		ForceColors: true,
 		//FullTimestamp: true,
+
 	})
 
 	if config.Debug {

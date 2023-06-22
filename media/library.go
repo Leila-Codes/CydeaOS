@@ -2,8 +2,8 @@ package media
 
 import (
 	"cydeaos/config"
-	"cydeaos/libs/media"
 	"cydeaos/log"
+	"cydeaos/models/media"
 	"github.com/google/uuid"
 	"github.com/sirupsen/logrus"
 	"os"
@@ -60,7 +60,7 @@ func LoadLibrary() error {
 					groupByMood[mood] = append(groupByMood[mood], *entry)
 					logger.WithFields(logrus.Fields{
 						"mood": mood,
-						//"name": entry.Name,
+						//"name": entry.Type,
 						"url": entry.URL,
 					}).Debug("Discovered media file")
 				}

@@ -1,14 +1,16 @@
 package media
 
 import (
-	"cydeaos/libs"
-	"cydeaos/libs/media"
+	"cydeaos/events"
+	"cydeaos/models/game"
+	"cydeaos/models/media"
 	"github.com/google/uuid"
+	"github.com/sirupsen/logrus"
 	"math/rand"
 )
 
 var (
-	gameInstances = make(map[string]*Manager)
+	gameInstances = make(map[game.Code]*Manager)
 )
 
 func getMenuTrack() uuid.UUID {
@@ -17,18 +19,43 @@ func getMenuTrack() uuid.UUID {
 	return trackList[nextIndex].ID
 }
 
-func handleGameCreation(gameInfo libs.GameEvent) {
-	if _, exists := gameInstances[*gameInfo.GameCode]; exists {
+func handleGameCreation(gameInfo events.Event) {
+	if gameInfo.Header().GameCode == nil {
 		return
 	}
 
-	gameInstances[*gameInfo.GameCode] = NewManager()
+	if _, exists := gameInstances[*gameInfo.Header().GameCode]; exists {
+		return
+	}
+
+	logger.Info("Media manager created for game ", *gameInfo.Header().GameCode)
+
+	gameInstances[*gameInfo.Header().GameCode] = NewManager()
 }
 
-func handleGameDeletion(gameInfo libs.GameEvent) {
-	if _, exists := gameInstances[*gameInfo.GameCode]; !exists {
+func handleGameDeletion(gameInfo events.Event) {
+	if _, exists := gameInstances[*gameInfo.Header().GameCode]; !exists {
 		return
 	}
 
-	delete(gameInstances, *gameInfo.GameCode)
+	delete(gameInstances, *gameInfo.Header().GameCode)
+}
+
+// GameEventHandler handles game management events
+func GameEventHandler(ev events.Event) (events.Event, error) {
+	event := ev.(*events.GameManagementEvent)
+
+	logger.WithFields(logrus.Fields{
+		"action": event.Action,
+		"event":  event,
+	}).Info("GameEventHandler [media] rx event")
+
+	switch event.Action {
+	case events.CreateGame:
+		handleGameCreation(event)
+	case events.DeleteGame:
+		handleGameDeletion(event)
+	}
+
+	return nil, nil
 }

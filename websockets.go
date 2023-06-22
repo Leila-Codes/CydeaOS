@@ -1,7 +1,7 @@
 package main
 
 import (
-	"cydeaos/libs"
+	"cydeaos/config"
 	"github.com/google/uuid"
 	"github.com/gorilla/websocket"
 	"net/http"
@@ -14,11 +14,23 @@ type WebsocketClient struct {
 }
 
 var (
-	upgrader = websocket.Upgrader{HandshakeTimeout: 10 * time.Second}
+	upgrader websocket.Upgrader
 
 	clients = make(map[string]*WebsocketClient)
-	rooms   = make(map[string][]libs.Player)
+	//rooms   = make(map[string][]*models.Player)
 )
+
+func init() {
+	upgrader = websocket.Upgrader{
+		HandshakeTimeout: 10 * time.Second,
+	}
+
+	if config.Debug {
+		upgrader.CheckOrigin = func(r *http.Request) bool {
+			return true
+		}
+	}
+}
 
 func wsConnHandler(w http.ResponseWriter, r *http.Request) {
 	conn, err := upgrader.Upgrade(w, r, nil)
@@ -34,5 +46,7 @@ func wsConnHandler(w http.ResponseWriter, r *http.Request) {
 	)
 
 	clients[socketID] = socket
+
 	// TODO: go socketReceiver(socket)
+	go wsHandler(conn)
 }

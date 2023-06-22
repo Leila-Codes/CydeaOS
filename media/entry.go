@@ -2,7 +2,7 @@ package media
 
 import (
 	"cydeaos/config"
-	"cydeaos/libs/media"
+	"cydeaos/models/media"
 	"fmt"
 	"github.com/google/uuid"
 	"strings"

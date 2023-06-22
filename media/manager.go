@@ -1,7 +1,7 @@
 package media
 
 import (
-	"cydeaos/libs/media"
+	"cydeaos/models/media"
 	"github.com/google/uuid"
 )
 
