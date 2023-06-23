@@ -10,16 +10,10 @@ type daemonTemplate struct {
 	Port int    `json:"port"`
 }
 
-type fileTemplate struct {
-	Name     string          `json:"name"`
-	Type     string          `json:"type"`
-	Contents json.RawMessage `json:"contents"`
-}
-
 type computerTemplate struct {
 	Hostname string           `json:"host"`
 	Daemons  []daemonTemplate `json:"daemons"`
-	Files    []fileTemplate   `json:"files"`
+	Files    FileEntry        `json:"files"`
 }
 
 func FromTemplate(f *os.File) (*Computer, error) {
